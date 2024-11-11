@@ -3,15 +3,23 @@
         <div class="flex justify-between h-16">
             <div class="flex items-center">
                 <!-- Logo -->
-                <a href="{{ route('dashboard') }}" class="shrink-0">
+                <a href="{{ route('index') }}" class="shrink-0">
                     <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                 </a>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                    <!-- Conditionally render Dashboard or Website link based on current route -->
+                    @if(request()->routeIs('dashboard'))
+                        <x-nav-link :href="route('index')" :active="request()->routeIs('index')">
+                            {{ __('Website') }}
+                        </x-nav-link>
+                    @else
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                            {{ __('Dashboard') }}
+                        </x-nav-link>
+                    @endif
+
                     <x-nav-link :href="route('index')" :active="request()->routeIs('index')">
                         {{ __('SOON') }}
                     </x-nav-link>
@@ -34,13 +42,12 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <!-- Only show profile options if the user is logged in -->
                         @if(Auth::check())
                             <x-dropdown-link :href="route('profile.edit')">
                                 {{ __('Profile') }}
                             </x-dropdown-link>
 
-                            <!-- Logout -->
+                            <!-- Logout Form -->
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <x-dropdown-link :href="route('logout')"
@@ -49,7 +56,12 @@
                                 </x-dropdown-link>
                             </form>
                         @else
-                            <p class="px-4 py-2 text-sm text-gray-500">Please log in to access additional features.</p>
+                            <x-dropdown-link :href="route('login')">
+                                {{ __('Login') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('register')">
+                                {{ __('Register') }}
+                            </x-dropdown-link>
                         @endif
                     </x-slot>
                 </x-dropdown>
@@ -76,7 +88,6 @@
         </div>
 
         @if(Auth::check())
-            <!-- Responsive Settings Options for Logged-in Users -->
             <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
                 <div class="px-4">
                     <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
@@ -94,6 +105,21 @@
                             {{ __('Log Out') }}
                         </x-responsive-nav-link>
                     </form>
+                </div>
+            </div>
+        @else
+            <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
+                <div class="px-4">
+                    <div class="font-medium text-base text-gray-800 dark:text-gray-200">Guest</div>
+                </div>
+
+                <div class="mt-3 space-y-1">
+                    <x-responsive-nav-link :href="route('login')">
+                        {{ __('Login') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('register')">
+                        {{ __('Register') }}
+                    </x-responsive-nav-link>
                 </div>
             </div>
         @endif
