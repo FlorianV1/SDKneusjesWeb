@@ -15,6 +15,12 @@ Route::get('/test', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/tournaments', function () {
+    return view('tournaments');
+})->middleware(['auth', 'verified'])->name('tournaments');
+Route::get('/tournament-create', function () {
+    return view('tournament-create');
+})->middleware(['auth', 'verified'])->name('tournament-create');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

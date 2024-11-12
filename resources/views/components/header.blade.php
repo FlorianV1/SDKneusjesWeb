@@ -9,23 +9,25 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:ms-10 sm:flex">
-                    <!-- Conditionally render Dashboard or Website link based on current route -->
                     @if(request()->routeIs('dashboard'))
                         <x-nav-link :href="route('index')" :active="request()->routeIs('index')">
                             {{ __('Website') }}
                         </x-nav-link>
                     @else
-                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                            {{ __('Dashboard') }}
+                        @if(Auth::check())
+                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                                {{ __('Dashboard') }}
+                            </x-nav-link>
+                        @endif
+                    @endif
+                    @if(Auth::check())
+                        <x-nav-link :href="route('tournaments')" :active="request()->routeIs('tournaments')">
+                            {{ __('Tournaments') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('tournament-create')" :active="request()->routeIs('tournament-create')">
+                            {{ __('Create') }}
                         </x-nav-link>
                     @endif
-
-                    <x-nav-link :href="route('index')" :active="request()->routeIs('index')">
-                        {{ __('SOON') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('SOON') }}
-                    </x-nav-link>
                 </div>
             </div>
 
