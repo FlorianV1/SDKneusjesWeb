@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+
 class User extends Authenticatable
 {
     use Notifiable;
@@ -21,5 +22,9 @@ class User extends Authenticatable
     public function hasRole($roleName)
     {
         return $this->role && $this->role->name === $roleName;
+    }
+    public function tournaments()
+    {
+        return $this->hasMany(Tournament::class);
     }
 }

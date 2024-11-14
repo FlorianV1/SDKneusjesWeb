@@ -1,13 +1,21 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Database\Seeders\RoleSeeder;
+use Database\Seeders\UserSeeder;
+use Database\Seeders\TournamentSeeder;
+use Database\Seeders\TeamSeeder;
+use Database\Seeders\MatchSeeder;
 
 class DatabaseSeeder extends Seeder
 {
-    public function run()
+        public function run()
     {
-        // Call RoleSeeder to seed roles
-        $this->call(RoleSeeder::class);
+        $this->call([
+            UserSeeder::class,
+            TournamentSeeder::class,
+            TeamSeeder::class,
+            MatchSeeder::class,
+        ]);
     }
+
 }

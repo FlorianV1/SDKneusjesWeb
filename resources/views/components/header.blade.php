@@ -21,7 +21,7 @@
                         @endif
                     @endif
                     @if(Auth::check())
-                        <x-nav-link :href="route('tournaments')" :active="request()->routeIs('tournaments')">
+                        <x-nav-link :href="route('tournaments.index')" :active="request()->routeIs('tournaments')">
                             {{ __('Tournaments') }}
                         </x-nav-link>
                         <x-nav-link :href="route('tournament-create')" :active="request()->routeIs('tournament-create')">
