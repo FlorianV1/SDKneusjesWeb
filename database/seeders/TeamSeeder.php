@@ -15,3 +15,8 @@ class TeamSeeder extends Seeder
         }
     }
 }
+// Generate additional teams with random names
+for ($i = 1; $i <= 100; $i++) {
+    $teamName = 'Team ' . chr(65 + ($i % 26)) . $i;
+    Team::create(['name' => $teamName]);
+}

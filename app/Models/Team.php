@@ -20,4 +20,8 @@ class Team extends Model
     {
         return $this->hasMany(Matches::class, 'team1_id')->orWhere('team2_id', $this->id);
     }
+    public static function createTeam($name)
+    {
+        return self::create(['name' => $name]);
+    }
 }

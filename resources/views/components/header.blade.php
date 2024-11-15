@@ -24,7 +24,7 @@
                         <x-nav-link :href="route('tournaments.index')" :active="request()->routeIs('tournaments')">
                             {{ __('Tournaments') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('tournament-create')" :active="request()->routeIs('tournament-create')">
+                        <x-nav-link :href="route('tournaments.create')" :active="request()->routeIs('tournaments.create')">
                             {{ __('Create') }}
                         </x-nav-link>
                     @endif

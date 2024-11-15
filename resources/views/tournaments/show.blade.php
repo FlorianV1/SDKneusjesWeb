@@ -1,9 +1,7 @@
 <x-base-layout>
-    @extends('layouts.app')
-
 @section('content')
 <div class="container mx-auto p-6">
-    <h1 class="text-4xl font-bold text-center mb-8">{{ $tournament->name }} Bracket</h1>
+    <h1 class="text-5xl font-bold text-center mb-8 text-white">{{ $tournament->name }} Bracket</h1>
 
     <div class="flex overflow-x-auto space-x-6">
         @foreach($rounds as $roundNumber => $matches)
@@ -37,6 +35,4 @@
         @endforeach
     </div>
 </div>
-@endsection
-
 </x-base-layout>
