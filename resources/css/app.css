@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+:root{
+    --barcolor: rgba(0, 89, 18, 0.61);    /* header footer */
+    --backgroundcolor: rgb(159, 203, 1);   /* achtergrond */
+}
