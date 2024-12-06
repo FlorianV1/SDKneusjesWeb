@@ -3,25 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\Matches;
-
 
 class Team extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'user_id'];
 
-    public function tournaments()
+    // Relationship: A team belongs to a user
+    public function user()
     {
-        return $this->belongsToMany(Tournament::class, 'tournament_team');
+        return $this->belongsTo(User::class);
     }
 
-    public function matches()
+    public function players()
     {
-        return $this->hasMany(Matches::class, 'team1_id')->orWhere('team2_id', $this->id);
-    }
-    public static function createTeam($name)
-    {
-        return self::create(['name' => $name]);
+        return $this->hasMany(Player::class); // Assuming you have a Player model and a "players" table
     }
 }

@@ -63,15 +63,14 @@
         var container = document.getElementById('teams-container');
         var newInput = document.createElement('div');
         newInput.classList.add('team-input', 'mb-2');
-        newInput.innerHTML = `
-            <input
+        newInput.innerHTML =
+            `<input
                 type="text"
                 name="teams[]"
                 placeholder="Enter Team Name"
                 required
                 class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            >
-        `;
+            >`;
         container.appendChild(newInput);
     });
 </script>
