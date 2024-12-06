@@ -16,7 +16,6 @@
                         @endif
                     </div>
                 </div>
-
                 <div class="p-6">
                     <!-- Display Team Name -->
                 @if(Auth::user()->role === 'coach')
