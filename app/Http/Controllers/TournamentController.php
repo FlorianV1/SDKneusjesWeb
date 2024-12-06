@@ -18,7 +18,7 @@ class TournamentController extends Controller
     {
         $tournament = Tournament::with(['matches.team1', 'matches.team2', 'matches.winner'])->findOrFail($id);
         $rounds = $tournament->matches->groupBy('round');
-        return view('show', compact('tournament', 'rounds'));
+        return view('tournaments/show', compact('tournament', 'rounds'));
     }
 
     public function create()
@@ -48,6 +48,6 @@ class TournamentController extends Controller
         $tournament->teams()->attach($request->teams);
 
         return redirect()->route('tournaments.show', $tournament->id)
-                         ->with('success', 'Tournament created successfully!');
+        ->with('success', 'Tournament created successfully!');
     }
 }

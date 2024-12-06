@@ -29,22 +29,23 @@
                 class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             ></textarea>
         </div>
-
-        <!-- Select Teams -->
+        <!-- Create Teams -->
         <div class="mb-4">
-            <label for="teams" class="block text-sm font-medium text-gray-700">Select Teams</label>
-            <select
-                name="teams[]"
-                id="teams"
-                multiple
-                required
-                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            >
-                @foreach($teams as $team)
-                    <option value="{{ $team->id }}">{{ $team->name }}</option>
-                @endforeach
-            </select>
-            <small class="text-gray-500">Hold down Ctrl (or Cmd on Mac) to select multiple teams.</small>
+            <label for="teams" class="block text-sm font-medium text-gray-700">Create Teams</label>
+            <div id="teams-container">
+                <div class="team-input mb-2">
+                    <input
+                        type="text"
+                        name="teams[]"
+                        placeholder="Enter Team Name"
+                        required
+                        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    >
+                </div>
+            </div>
+            <button type="button" id="add-team" class="mt-2 px-4 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75">
+                Add Team
+            </button>
         </div>
 
         <!-- Submit Button -->
@@ -55,3 +56,22 @@
         </div>
     </form>
 </x-base-layout>
+
+
+<script>
+    document.getElementById('add-team').addEventListener('click', function() {
+        var container = document.getElementById('teams-container');
+        var newInput = document.createElement('div');
+        newInput.classList.add('team-input', 'mb-2');
+        newInput.innerHTML = `
+            <input
+                type="text"
+                name="teams[]"
+                placeholder="Enter Team Name"
+                required
+                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            >
+        `;
+        container.appendChild(newInput);
+    });
+</script>
