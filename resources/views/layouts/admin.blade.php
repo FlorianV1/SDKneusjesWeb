@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>@yield('title', 'Tournaments')</title>
+    <title>Admin Dashboard</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
 </head>
 <body class="bg-white dark:bg-gray-900 bg-cover flex flex-col min-h-screen">
     <header>
-        <x-header /> <!-- Include Header Component -->
+        <x-header />
     </header>
-    <main class="flex-grow">
-        {{ $slot }}
+
+    <main>
+        @yield('content')
     </main>
+
     <footer>
-        <x-footer /> <!-- Include Footer Component -->
+        <x-footer />
     </footer>
 </body>
 </html>

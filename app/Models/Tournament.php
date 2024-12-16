@@ -9,7 +9,7 @@ use App\Models\Matches;
 
 class Tournament extends Model
 {
-    protected $fillable = ['name', 'type', 'status', 'user_id'];
+    protected $fillable = ['name', 'type', 'status', 'user_id', 'description'];
 
     public function user()
     {
