@@ -9,25 +9,25 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:ms-10 sm:flex">
-                    @if(Auth::check())
-                        @if(Auth::user()->role === 'coach')
-                            <x-nav-link :href="route('teams.index')" :active="request()->routeIs('teams.index')">
-                                {{ __('Team') }}
-                            </x-nav-link>
-                            <x-nav-link :href="route('teams.create')" :active="request()->routeIs('teams.create')">
-                                {{ __('Create Team') }}
-                            </x-nav-link>
-                        @endif
-                    @endif
-                    @if(Auth::check())
-                            @if(Auth::user()->role === 'referee')
-                            <x-nav-link :href="route('referee.dashboard')" :active="request()->routeIs('referee.dashbaord')">
-                                {{ __('Tournaments') }}
+                    @if(request()->routeIs('dashboard'))
+                        <x-nav-link :href="route('index')" :active="request()->routeIs('index')">
+                            {{ __('Website') }}
+                        </x-nav-link>
+                    @else
+                        @if(Auth::check())
+                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                                {{ __('Dashboard') }}
                             </x-nav-link>
                         @endif
                     @endif
-                    <!-- Dashboard Link -->
-
+                    @if(Auth::check())
+                        <x-nav-link :href="route('tournaments.index')" :active="request()->routeIs('tournaments')">
+                            {{ __('Tournaments') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('tournaments.create')" :active="request()->routeIs('tournaments.create')">
+                            {{ __('Create') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 

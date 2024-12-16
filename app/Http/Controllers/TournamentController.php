@@ -23,6 +23,7 @@ class TournamentController extends Controller
 
     public function create()
     {
+        // Fetch all teams to display in the form
         $teams = Team::all();
         return view('tournaments/create', compact('teams'));
     }
@@ -31,17 +32,19 @@ class TournamentController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'teams' => 'required|array|min:2',
-            'teams.*' => 'exists:teams,id',
+            'teams' => 'required|array|min:2', // At least two teams must be selected
+            'teams.*' => 'exists:teams,id',  // Validate each selected team ID exists
         ]);
 
+        // Create the tournament
         $tournament = Tournament::create([
             'name' => $request->name,
             'description' => $request->description ?? null,
             'user_id' => auth()->id(),
-            'type' => 'single-elimination',
+            'type' => 'single-elimination', // Default type
         ]);
 
+        // Attach selected teams to the tournament
         $tournament->teams()->attach($request->teams);
 
         return redirect()->route('tournaments.show', $tournament->id)
