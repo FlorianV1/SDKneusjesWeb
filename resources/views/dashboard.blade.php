@@ -1,20 +1,9 @@
 <x-base-layout>
-    <div class="py-12">
+        <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
-                    <div class="mt-8 text-2xl">
-                        Welcome to your team management dashboard, {{ auth()->user()->name }}!
-                    </div>
-                    <div class="mt-6 text-gray-500">
-                        @if(Auth::user()->role === 'coach')
-                        Here you can manage your team and players.
-                        @elseif (Auth::user()->role === 'referee')
-                        Here you can manage your tournaments.
-                        @elseif (Auth::user()->role === 'admin')
-                        Here you can manage the system.
-                        @endif
-                    </div>
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    {{ __("You're logged in!") }}
                 </div>
                 <div class="p-6">
                     <!-- Display Team Name -->
