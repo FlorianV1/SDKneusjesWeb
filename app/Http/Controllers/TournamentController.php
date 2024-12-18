@@ -159,7 +159,6 @@ protected function generateRoundRobinMatches(Tournament $tournament, $teams)
 
     public function create()
     {
-        // Fetch all teams to display in the form
         $teams = Team::all();
         return view('tournaments.create', compact('teams'));
     }
@@ -169,23 +168,18 @@ protected function generateRoundRobinMatches(Tournament $tournament, $teams)
         // dd($request);dd('hello there');
         $request->validate([
             'name' => 'required|string',
-
-
             'description' => 'nullable|string',
             // 'teams' => 'required|array|min:2',
             // 'teams.*' => 'exists:teams,id',
-
         ]);
 
-        // Create the tournament
         $tournament = Tournament::create([
             'name' => $request->name,
             'description' => $request->description ?? null,
             'user_id' => auth()->id(),
-            'type' => 'single-elimination', // Default type
+            'type' => 'single-elimination',
         ]);
 
-        // Attach selected teams to the tournament
         $tournament->teams()->attach($request->teams);
 
         return redirect()->route('tournaments.show', $tournament->id)
