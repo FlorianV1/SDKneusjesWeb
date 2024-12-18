@@ -19,12 +19,16 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    public function hasRole($roleName)
+    public function hasRole(string $roleName): bool
     {
-        return $this->role && $this->role->name === $roleName;
+        return $this->role === $roleName;
     }
     public function tournaments()
     {
         return $this->hasMany(Tournament::class);
+    }
+    public function team()
+    {
+        return $this->hasOne(Team::class);
     }
 }

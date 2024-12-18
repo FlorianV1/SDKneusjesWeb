@@ -11,6 +11,7 @@ class CreateTournamentsTable extends Migration
         Schema::create('tournaments', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            
             $table->string('type')->default('single-elimination');
             $table->enum('status', ['not_started', 'in_progress', 'completed'])->default('not_started');
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Links to users table

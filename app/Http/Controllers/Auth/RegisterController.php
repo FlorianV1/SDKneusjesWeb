@@ -3,37 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Role;
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Models\Team;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
-    // Method to display registration form (if you have one)
-    public function showRegistrationForm()
-    {
-        return view('auth.register'); // Create a register view if you need
-    }
-
-    // Method to handle registration
-    public function register(Request $request)
-    {
-        $data = $request->all();
-        $this->validator($data)->validate();
-
-        // Create the user and assign the default role
-        $user = $this->create($data);
-
-        // Log in the user if needed
-        auth()->login($user);
-
-        // Redirect to the intended location, or home page
-        return redirect()->intended('/home');
-    }
-
-    // Validation rules for registration
     protected function validator(array $data)
     {
         return Validator::make($data, [
@@ -43,14 +19,23 @@ class RegisterController extends Controller
         ]);
     }
 
-    // Method to create a new user with default role
     protected function create(array $data)
     {
-        return User::create([
+        // Create the user
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'role_id' => Role::where('name', 'normal user')->first()->id, // Assign default role
+            'role' => 'coach', // Assuming you want to set a default role
         ]);
+
+        // Automatically create a team for the new user
+        Team::create([
+            'name' => $user->name . "'s Team",
+            'user_id' => $user->id,
+            'description' => 'New team created upon registration' // Optional initial description
+        ]);
+
+        return $user;
     }
 }

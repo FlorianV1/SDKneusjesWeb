@@ -14,4 +14,6 @@ class HomeController extends Controller
         return view('index')->with('tournaments', $tournaments);
     }
 
+
+
 }
