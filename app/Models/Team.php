@@ -1,25 +1,27 @@
 <?php
+
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Matches;
 
 
 class Team extends Model
 {
-    protected $fillable = ['name', 'user_id', 'description']; // Add 'description' to fillable array
-
-    // Existing relationships remain the same
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function players()
-    {
-        return $this->hasMany(Player::class);
-    }
+    protected $fillable = ['name'];
 
     public function tournaments()
     {
         return $this->belongsToMany(Tournament::class, 'tournament_team');
+    }
+
+    public function matches()
+    {
+        return $this->hasMany(Matches::class, 'team1_id')->orWhere('team2_id', $this->id);
+    }
+    public static function createTeam($name)
+    {
+        return self::create(['name' => $name]);
     }
 }

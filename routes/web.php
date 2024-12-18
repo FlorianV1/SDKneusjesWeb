@@ -3,7 +3,6 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\TeamController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\TournamentController;
 use App\Http\Controllers\MatchController;
