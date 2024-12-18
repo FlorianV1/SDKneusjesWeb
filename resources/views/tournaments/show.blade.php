@@ -22,9 +22,9 @@
                         @foreach($matches as $match)
                             <div class="bg-white rounded-lg shadow-md p-4">
                                 <div class="flex items-center justify-between">
-                                    @if(auth()->user()->hasRole('admin'))
+                                    {{-- @if(auth()->user()->hasRole('admin'))
                                         <a href="{{ route('matches.editForAdmin', $match->id) }}" class="text-blue-500 hover:text-blue-700">Edit</a>
-                                    @endif
+                                    @endif --}}
                                     @if(auth()->user()->hasRole('referee'))
                                         <a href="{{ route('matches.editForReferee', $match->id) }}" class="text-green-500 hover:text-green-700">Edit as Referee</a>
                                     @endif
@@ -44,6 +44,7 @@
                                         @if($match->team2_score !== null)
                                             <span class="text-gray-600"> - {{ $match->team2_score }}</span>
                                         @endif
+                                    </div>
                                     </div>
                                 </div>
                                 @if ($match->winner_id)

@@ -22,7 +22,10 @@
                     @if(Auth::check())
                         @if(Auth::user()->role === 'referee')
                             <x-nav-link :href="route('referee.dashboard')" :active="request()->routeIs('referee.dashboard')" class="text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-gray-400">
-                                {{ __('Tournaments') }}
+                                {{ __('Dashboard') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('referee.matches')" :active="request()->routeIs('referee.matches')" class="text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-gray-400">
+                                {{ __('Matches') }}
                             </x-nav-link>
                         @endif
                     @endif

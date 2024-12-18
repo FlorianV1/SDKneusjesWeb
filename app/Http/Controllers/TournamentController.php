@@ -7,7 +7,7 @@ use App\Models\Team;
 use App\Models\Player;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use app\models\Matches;
+use App\Models\Matches;
 
 class TournamentController extends Controller
 {
@@ -28,6 +28,20 @@ class TournamentController extends Controller
     return view('tournaments', compact('tournaments'));
 }
 
+public function signup(Tournament $tournament)
+{
+    $team = Team::where('user_id', Auth::id())->first();
+
+    if ($tournament->teams->contains($team)) {
+        return redirect()->route('tournaments.show', $tournament->id)
+            ->with('error', 'You have already signed up for this tournament.');
+    }
+
+    $tournament->teams()->attach($team);
+
+    return redirect()->route('tournaments.show', $tournament->id)
+        ->with('success', 'Signed up for the tournament successfully!');
+}
 
 public function startTournament($id)
 {
@@ -106,11 +120,26 @@ protected function generateRoundRobinMatches(Tournament $tournament, $teams)
 
     }
 
-    public function dashboard(){
-        $team = Team::where('user_id', Auth::id())->first();
+    public function dashboard()
+    {
         $user = Auth::user();
+
+        if ($user->role === 'referee') {
+            // Get tournaments with pending matches
+            $tournaments = Tournament::whereHas('matches', function($query) {
+                $query->where('status', 'Pending');
+            })->with(['matches' => function($query) {
+                $query->where('status', 'Pending')
+                    ->with(['team1', 'team2']);
+            }])->get();
+
+            return view('dashboard', compact('tournaments'));
+        }
+
+        // Existing dashboard logic for other roles
+        $team = Team::where('user_id', Auth::id())->first();
         $players = Player::where('team_id', $team)->get();
-        return view('dashboard', compact('team',  'players', 'user'));
+        return view('dashboard', compact('team', 'players', 'user'));
     }
     public function show($id)
     {
@@ -128,21 +157,20 @@ protected function generateRoundRobinMatches(Tournament $tournament, $teams)
         return view('tournaments.show', compact('tournament', 'rounds', 'teams'));
     }
 
-
     public function create()
     {
         $teams = Team::all();
-        return view('tournaments/create', compact('teams'));
+        return view('tournaments.create', compact('teams'));
     }
 
     public function store(Request $request)
     {
-        dd($request);dd('hello there');
+        // dd($request);dd('hello there');
         $request->validate([
             'name' => 'required|string',
             'description' => 'nullable|string',
-            'teams' => 'required|array|min:2',
-            'teams.*' => 'exists:teams,id',
+            // 'teams' => 'required|array|min:2',
+            // 'teams.*' => 'exists:teams,id',
         ]);
 
         $tournament = Tournament::create([

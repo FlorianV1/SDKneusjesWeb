@@ -4,7 +4,7 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
                     <div class="mt-8 text-2xl">
-                        Welcome to your team management dashboard, {{ auth()->user()->name }}!
+                        Welcome to your dashboard, {{ auth()->user()->name }}!
                     </div>
                     <div class="mt-6 text-gray-500">
                         @if(Auth::user()->role === 'coach')
@@ -17,6 +17,36 @@
                     </div>
                 </div>
                 <div class="p-6">
+                    @if(Auth::user()->role === 'refferee')
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- Tournament Information Section -->
+                            <div class="bg-gray-100 rounded-lg shadow-md p-6">
+                                <h3 class="text-lg font-semibold mb-4">Tournament Details</h3>
+                                <p class="text-gray-500">You are the referee for the tournament: {{ $tournament->name }}</p>
+                            </div>
+                        </div>
+                    <div class="bg-gray-100 rounded-lg shadow-md p-6">
+                        <h3 class="text-lg font-semibold mb-4">Ongoing Tournaments</h3>
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr>
+                                    <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tournament Name</th>
+                                    <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
+                                    <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">End Date</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @foreach($ongoingTournaments as $tournament)
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $tournament->name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $tournament->start_date }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $tournament->end_date }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    @endif
                     @if(Auth::user()->role === 'coach')
                         @if(Auth::user()->team)
                             <div class="grid md:grid-cols-2 gap-6">

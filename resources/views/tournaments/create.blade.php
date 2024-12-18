@@ -1,6 +1,10 @@
 <x-base-layout>
     <h1 class="text-3xl font-bold mb-6">Create Tournament</h1>
-
+    @if($errors->any())
+        @foreach($errors->all() as $error)
+            <div class="text-red-500">{{ $error }}</div>
+        @endforeach
+    @endif
     <form method="POST" action="{{ route('tournaments.store') }}" class="max-w-3xl mx-auto p-6 bg-[--barcolor] shadow-lg rounded-lg">
         @csrf
 

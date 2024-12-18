@@ -1,53 +1,101 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Matches;
-use App\Models\Team;
+use App\Models\Tournament;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MatchController extends Controller
 {
+    // List all matches for referee
+    public function index()
+    {
+        // Get all tournaments with pending matches for the referee
+        $tournaments = Tournament::whereHas('matches', function($query) {
+            $query->where('status', 'Pending');
+        })->with(['matches' => function($query) {
+            $query->where('status', 'Pending')
+                  ->with(['team1', 'team2', 'tournament']);
+        }])->get();
+
+        return view('matches.index', compact('tournaments'));
+    }
+
+    // Show specific match details for referee
+    public function showForReferee(Matches $match)
+    {
+        // Ensure only referees can access this
+        if (Auth::user()->role !== 'referee') {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('matches.show', compact('match'));
+    }
+
+    // Start a match (if needed)
+    public function startMatch(Matches $match)
+    {
+        // Ensure only referees can start matches
+        if (Auth::user()->role !== 'referee') {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $match->update(['status' => 'In Progress']);
+
+        return redirect()->route('referee.matches.show', $match)
+            ->with('success', 'Match started successfully!');
+    }
+
+    // Edit match for referee
     public function editForReferee($id)
-{
-    $match = Matches::with(['team1', 'team2', 'tournament'])->findOrFail($id);
+    {
+        $match = Matches::findOrFail($id);
 
-    // Ensure only referees can access this
-    if (!auth()->user()->hasRole('referee')) {
-        abort(403, 'Unauthorized action.');
+        // Ensure only referees can access this
+        if (Auth::user()->role !== 'referee') {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('matches.edit-referee', compact('match'));
     }
 
-    return view('matches.edit-referee', compact('match'));
-}
+    // Update match results
+    public function updateForReferee(Request $request, $id)
+    {
+        $match = Matches::findOrFail($id);
 
-public function updateForReferee(Request $request, $id)
-{
-    $match = Matches::findOrFail($id);
+        // Ensure only referees can update
+        if (Auth::user()->role !== 'referee') {
+            abort(403, 'Unauthorized action.');
+        }
 
-    // Ensure only referees can update
-    if (!auth()->user()->hasRole('referee')) {
-        abort(403, 'Unauthorized action.');
-    }
+        // Validate the input
+        $validatedData = $request->validate([
+            'team1_score' => 'required|numeric|min:0',
+            'team2_score' => 'required|numeric|min:0',
+            'status' => 'required|in:Pending,Completed'
+        ]);
 
-    $validatedData = $request->validate([
-        'team1_score' => 'required|integer|min:0',
-        'team2_score' => 'required|integer|min:0',
-    ]);
+        // Determine the winner
+        if ($validatedData['team1_score'] > $validatedData['team2_score']) {
+            $winnerId = $match->team1_id;
+        } elseif ($validatedData['team1_score'] < $validatedData['team2_score']) {
+            $winnerId = $match->team2_id;
+        } else {
+            $winnerId = null; // Draw
+        }
 
-    // Determine the winner
-    $winnerId = $validatedData['team1_score'] > $validatedData['team2_score']
-        ? $match->team1_id
-        : ($validatedData['team1_score'] < $validatedData['team2_score']
-            ? $match->team2_id
-            : null);
+        // Update the match
+        $match->update([
+            'team1_score' => $validatedData['team1_score'],
+            'team2_score' => $validatedData['team2_score'],
+            'winner_id' => $winnerId,
+            'status' => $validatedData['status']
+        ]);
 
-    $match->update([
-        'team1_score' => $validatedData['team1_score'],
-        'team2_score' => $validatedData['team2_score'],
-        'winner_id' => $winnerId,
-        'status' => 'Completed'
-    ]);
-
-    return redirect()->route('tournaments.show', $match->tournament_id)
-        ->with('success', 'Match results updated successfully.');
+        return redirect()->route('referee.matches')
+            ->with('success', 'Match results updated successfully!');
     }
 }
