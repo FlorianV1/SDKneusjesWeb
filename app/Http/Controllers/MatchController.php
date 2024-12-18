@@ -12,13 +12,12 @@ class MatchController extends Controller
     // List all matches for referee
     public function index()
     {
-        // Get all tournaments with pending matches for the referee
-        $tournaments = Tournament::whereHas('matches', function($query) {
-            $query->where('status', 'Pending');
-        })->with(['matches' => function($query) {
-            $query->where('status', 'Pending')
-                  ->with(['team1', 'team2', 'tournament']);
-        }])->get();
+        // Ensure only referees can access this
+        if (Auth::user()->role !== 'referee') {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $tournaments = Tournament::where('status', 'In_progress')->get();
 
         return view('matches.index', compact('tournaments'));
     }
