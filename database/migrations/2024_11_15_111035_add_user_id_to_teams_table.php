@@ -9,17 +9,17 @@ class AddUserIdToTeamsTable extends Migration
     public function up()
     {
         Schema::table('teams', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id')->after('id');  // Add user_id after the id
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');  // Foreign key to users table
+            $table->unsignedBigInteger('user_id')->after('name'); // Add user_id after the name column
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); // Add foreign key constraint
         });
     }
 
     public function down()
     {
         Schema::table('teams', function (Blueprint $table) {
-            $table->dropColumn('user_id');
+            $table->dropForeign(['user_id']); // Drop foreign key
+            $table->dropColumn('user_id');    // Drop the user_id column
         });
     }
-
 }
 
