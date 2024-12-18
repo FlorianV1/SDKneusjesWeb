@@ -97,4 +97,21 @@ class MatchController extends Controller
         return redirect()->route('referee.matches')
             ->with('success', 'Match results updated successfully!');
     }
+    public function getMatchScores()
+    {
+        $games = Matches::all();
+
+        $response = $games->map(function ($game) {
+            return [
+                'team_1' => $game->team1->name,
+                'team_2' => $game->team2->name,
+                'team1_score' => $game->team1_score,
+                'team2_score' => $game->team2_score,
+                'tournament_id' => $game->tournament_id,
+                "status" => $game->status
+            ];
+        });
+
+        return response()->json($response);
+    }
 }
